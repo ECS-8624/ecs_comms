@@ -1,5 +1,7 @@
 if SERVER then 
-
+    if (elib2) then 
+        elib2.addons:Add("eComms", true) --A test for a library of mine
+    end 
     util.AddNetworkString("ecs:Comms")
     --[[---------
     Here's the config in short.
@@ -26,7 +28,6 @@ if SERVER then
             Color = Color(247,169,0),
             command = "atc"
         },
-    
 }
     
 --[[-------------------
@@ -34,12 +35,8 @@ if SERVER then
 Don't Touch the code below...
 
 --]]-------------
-
-
---string.sub(text, #comms["Air Traffic Control"].command + 3
   for k,v in pairs(cfg) do
         hook.Add("PlayerSay", "ecs:Comms:" .. v.command, function(ply, text)
-            
             if (string.find(text, "/"..v.command))then 
                 net.Start("ecs:Comms")
                 net.WriteTable({
@@ -51,19 +48,12 @@ Don't Touch the code below...
                 net.Broadcast()
                 return ""
             end 
-
         end )
   end
-
 else 
+  net.Receive("ecs:Comms", function()
+    local tbl = net.ReadTable()
 
-    net.Receive("ecs:Comms", function()
-        local tbl = net.ReadTable()
-
-        chat.AddText(tbl.col, tbl.prefix, Color(255,255,255), tbl.user_name .. " ", Color(255,255,255), tbl.othertext)
-
+    chat.AddText(tbl.col, tbl.prefix, Color(255,255,255), tbl.user_name .. " ", Color(255,255,255), tbl.othertext)
     end )
-
-
 end
---a
